@@ -10,9 +10,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.exceptions import ValidationError
 
-class Signup(APIView):
+class CustomerSignup(APIView):
     def post(self, request, format=None):
-        serializer = UserSerializer(data=request.data)
+        serializer = CustemerSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             user = serializer.instance
@@ -20,16 +20,25 @@ class Signup(APIView):
             return Response({"user": serializer.data, "token": token.key,"message":"---SUCCESSFULLY signup--"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    
-class Login(APIView):
+class AdminSignup(APIView):
     def post(self, request, format=None):
-        data = request.data
-        user = authenticate(username=data.get('username'), password=data.get('password'))
-        if user:
-            serializer = UserSerializer(user)
+        serializer = AdminSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            user = serializer.instance
             token, created = Token.objects.get_or_create(user=user)
-            return Response({"user": serializer.data, "token": token.key,"message":"---SUCCESSFULLY LOGIN--"}, status=status.HTTP_200_OK)
-        return Response({"details": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"user": serializer.data, "token": token.key,"message":"---SUCCESSFULLY signup--"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+# class Login(APIView):
+#     def post(self, request, format=None):
+#         data = request.data
+#         user = authenticate(username=data.get('username'), password=data.get('password'))
+#         if user:
+#             serializer = UserSerializer(user)
+#             token, created = Token.objects.get_or_create(user=user)
+#             return Response({"user": serializer.data, "token": token.key,"message":"---SUCCESSFULLY LOGIN--"}, status=status.HTTP_200_OK)
+#         return Response({"details": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
     
 
 

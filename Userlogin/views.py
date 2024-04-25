@@ -27,7 +27,7 @@ class AdminSignup(APIView):
             serializer.save()
             user = serializer.instance
             token, created = Token.objects.get_or_create(user=user)
-            return Response({"user": serializer.data, "token": token.key,"message":"---SUCCESSFULLY signup--"}, status=status.HTTP_201_CREATED)
+            return Response({"user": serializer.data, "token": token.key,"message":"---SUCCESSFULLY signup by admin--"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 # class Login(APIView):
